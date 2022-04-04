@@ -18,7 +18,7 @@ Optional. Specifies a path where the search will start. Default is current direc
 
 .PARAMETER Include
 
-Optional. Use one or more initial filters on the files in the specified path before processing further (for list and/or duplicate). If specified, wildcards will need to be used for, i.e. file extensions where, 
+Optional. Use one or more initial filters on the files in the specified path before processing further (for list and/or duplicate-checking). Multiple filter statements need to be separated by commas. If wildcards are not included in each filter statement the search will only return exact filename matches. 
 
 .PARAMETER Recurse
 
@@ -54,6 +54,18 @@ and each of the logs will have the .log extension. These files will be simple UT
 .PARAMETER Verbose
 
 Optional. Causes more detailed messages to be output to the screen. Useful if there are problems.
+
+.EXAMPLE Search the current working directory, non-recursively, for duplicate files larger than 5 megabytes. Print output to the screen.
+
+.\SuperFind-Files.ps1 -Duplicates -AtLeast 5M
+
+.EXAMPLE Search "C:\Program Files" recursively, for duplicate .dll files. Print the output to c:\temp\c_programFiles_dup_n.log (duplicate filenames) and c:\temp\c_programfiles_dup_c.log (duplicate file contents)
+
+.\SuperFind-Files.ps1 -Path "C:\Program Files" -Recurse -Duplicates -Include *.dll -Log c:\temp\c_programFiles 
+
+.EXAMPLE Search "C:\Users\User" recursively, for .docx files greater than 700 kilobytes. Print the verbose output to the screen
+
+.\SuperFind-Files.ps1 -Path "C:\Users\User" -Recurse -List -Include *.docx -AtLeast 700K -Verbose
 #>
 
 param(
@@ -61,7 +73,7 @@ param(
 [switch]$recurse=$false, 
 [switch]$list=$false,
 [switch]$duplicates=$false,
-[string[]]$includes='*',
+[string[]]$include='*',
 [string]$atleast="0",
 [string]$log="",
 [switch]$verbose=$false
@@ -390,7 +402,8 @@ if($filenotprocessed.Count -gt 0)
             if((Read-Host -Prompt "Would you like to dump the list to a file and to the screen? [y|n]").tolower() -eq 'y')
             {
                 Add-Content -Path "FilesNotProcessed.txt" -value $fileNotProcessed
-                WriteLog -log_suffix "none" -logstring "[!] $fileNotProcessed" -foregroundcolor yellow
+                WriteLog -log_suffix "none" -logstring "[!] Files not processed:`n$fileNotProcessed`n" -foregroundcolor yellow
+				WriteLog -log_suffix "none" -logstring "[i] The above files have also been output to FilesNotProcessed.txt in the current directory (if you have write permissions here)" -foregroundcolor green
             }
         }
     }
