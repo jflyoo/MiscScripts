@@ -140,7 +140,7 @@ if($log_temp -ne '')
         #clear the log file basename so that subsequently in the script we will not attempt to write to a bad path
         if($verbose)
         {
-            WriteLog -logstring "[ ] Clearing log file basename variable"
+            WriteLog -logstring "[i] Clearing log file basename variable"
         }
 
         #log_temp gets set to an empty string so that $log will also be set to an empty string later
@@ -203,9 +203,9 @@ if($verbose)
 if($atleast.trim(' ') -ne '0' -and ($atleast.toupper().endswith('K') -or $atleast.toupper().endswith('M') -or $atleast.toupper().endswith('G')))
 {
 
-    if([System.UInt32]::TryParse($atleast.substring(0,$atleast.length-1),[ref]$atleast_uint32))
+    if([System.UInt32]::TryParse($atleast.substring(0,$atleast.length),[ref]$atleast_uint32))
     {
-        $atleast_uint32=[convert]::touint32($atleast.substring(0,$atleast.length-1))
+        $atleast_uint32=[convert]::touint32($atleast.substring(0,$atleast.length))
     }
     else
     {
@@ -236,7 +236,7 @@ if($atleast.trim(' ') -ne '0' -and ($atleast.toupper().endswith('K') -or $atleas
 	}
 	
 }
-elseif($atleast -ne $null -and ([System.UInt32]::TryParse($atleast.substring(0,$atleast.length-1),[ref]$atleast_uint32)))
+elseif($atleast -ne $null -and ([System.UInt32]::TryParse($atleast.substring(0,$atleast.length),[ref]$atleast_uint32)))
 {
 	$atleast_uint32=[convert]::touint32($atleast)
 	# we'll need to provide for the case where AtLeast can't be converted to a uint32
