@@ -10,7 +10,7 @@ if [[ `which enum4linux` ]]
 fi
 
 if [[ `which onesixtyone` ]]
-	then onesixyone > $base/help/onesixtyone
+	then onesixtyone > $base/help/onesixtyone
 fi
 
 if [[ `which snmp-check` ]]
